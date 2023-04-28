@@ -1,0 +1,12 @@
+D:\Work\OpenAIChatbot_API\UserQuestionsDataAccess\bin\Debug\UserQuestionsDataAccess.dll.config
+D:\Work\OpenAIChatbot_API\UserQuestionsDataAccess\bin\Debug\UserQuestionsDataAccess.dll
+D:\Work\OpenAIChatbot_API\UserQuestionsDataAccess\bin\Debug\UserQuestionsDataAccess.pdb
+D:\Work\OpenAIChatbot_API\UserQuestionsDataAccess\bin\Debug\EntityFramework.dll
+D:\Work\OpenAIChatbot_API\UserQuestionsDataAccess\bin\Debug\EntityFramework.SqlServer.dll
+D:\Work\OpenAIChatbot_API\UserQuestionsDataAccess\bin\Debug\EntityFramework.xml
+D:\Work\OpenAIChatbot_API\UserQuestionsDataAccess\bin\Debug\EntityFramework.SqlServer.xml
+D:\Work\OpenAIChatbot_API\UserQuestionsDataAccess\obj\Debug\UserQuestionsDataAccess.csproj.AssemblyReference.cache
+D:\Work\OpenAIChatbot_API\UserQuestionsDataAccess\obj\Debug\UserQuestionsDataAccess.csproj.CoreCompileInputs.cache
+D:\Work\OpenAIChatbot_API\UserQuestionsDataAccess\obj\Debug\UserQuestionsDataAccess.csproj.CopyComplete
+D:\Work\OpenAIChatbot_API\UserQuestionsDataAccess\obj\Debug\UserQuestionsDataAccess.dll
+D:\Work\OpenAIChatbot_API\UserQuestionsDataAccess\obj\Debug\UserQuestionsDataAccess.pdb

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BCWW_ChatbotModelStoreContainer" CdmEntityContainer="BCWW_ChatbotEntities">
+    <EntitySetMapping Name="tbl_userQuestions">
+      <EntityTypeMapping TypeName="BCWW_ChatbotModel.tbl_userQuestions">
+        <MappingFragment StoreEntitySet="tbl_userQuestions">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="userQuestion" ColumnName="userQuestion" />
+          <ScalarProperty Name="userIp" ColumnName="userIp" />
+          <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
