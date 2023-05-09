@@ -1,0 +1,13 @@
+@charset "utf-8";
+/* CSS Document */
+
+@font-face {
+    font-family: 'RotisSansSerifRegular';
+    src: url('../fonts/rotissas.eot');
+    src: url('../fonts/rotissas.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/rotissas.woff') format('woff'),
+         url('../fonts/rotissas.ttf') format('truetype'),
+         url('../fonts/rotissas.svg#RotisSansSerifRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
