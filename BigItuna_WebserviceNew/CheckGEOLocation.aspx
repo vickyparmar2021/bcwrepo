@@ -23,7 +23,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
-    <div>
+    <div>Hi Bcwebwise
     <asp:HiddenField ID="HiddenFieldLatitude" runat="server" />
     <asp:HiddenField ID="HiddenFieldLongitude" runat="server" />
     </div>
