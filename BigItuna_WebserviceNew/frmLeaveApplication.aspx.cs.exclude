@@ -1,0 +1,216 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class frmLeaveApplication : System.Web.UI.Page
+{
+    SqlConnection conn;
+    string userid, strQuery = "";
+    clsLeave_Logic objLeave = new clsLeave_Logic();
+    clsApplication_Logic objApplicaion = new clsApplication_Logic();
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        conn = new SqlConnection(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["bcmgrConnection"].ToString());
+        //if (Session["UserId"] == null)
+        //{
+        //    Response.Redirect("frmEmployeeLogin.aspx");
+        //}
+
+        if (Session["empid"] == null)
+        {
+            Response.Redirect("Default.aspx");
+        }
+
+        else
+        {
+            userid = Session["empid"].ToString();
+
+        }
+
+        if (Session["username"] == null)
+        {
+            Response.Redirect("Default.aspx");
+        }
+        else
+            txtUserName.Text = Session["username"].ToString();
+        if (!IsPostBack)
+        {
+            GetDeptname();
+            BindLeavetype();
+
+
+        }
+        GMDStartDate.Attributes.Add("readonly", "readOnly()");
+        GMDEndDate.Attributes.Add("readonly", "readOnly()");
+    }
+
+    protected void GetDeptname()
+    {
+        try
+        {
+            strQuery = @"select tblDept.teamhead from tblDept,tblEmployee where tblEmployee.deptid=tbldept.deptid and tblEmployee.empid=" + userid;
+            DataTable dTble = new DataTable();
+            SqlDataAdapter adp = new SqlDataAdapter(strQuery, conn);
+            adp.Fill(dTble);
+            if (dTble.Rows.Count > 0)
+            {
+                lbltemhead.Text = dTble.Rows[0]["teamhead"].ToString();
+            }
+
+
+
+        }
+        catch (Exception oe)
+        {
+            Response.Write("Exception :" + oe.Message);
+        }
+        finally
+        {
+            // bcBAL = null;
+        }
+    }
+
+
+
+    void BindLeavetype()
+    {
+        strQuery = @"select * from tbl_LeaveType";
+        DataTable dTble = new DataTable();
+        SqlDataAdapter adp = new SqlDataAdapter(strQuery, conn);
+        adp.Fill(dTble);
+        if (dTble.Rows.Count > 0)
+        {
+            ddlLeaveType.DataSource = dTble;
+            ddlLeaveType.DataTextField = "LeaveTypeName";
+            ddlLeaveType.DataValueField = "LeaveTypeId";
+            ddlLeaveType.DataBind();
+            ddlLeaveType.Items.Insert(0, "Select");
+        }
+
+
+    }
+
+    protected void ddlLeaveType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        decimal NoOfLeavesPerYear, UsedLeaves, BalanceLeave;
+        if (ddlLeaveType.SelectedItem.Text != "Select")
+        {
+            if (ddlLeaveType.SelectedItem.Value == "4")
+            {
+
+                trblncleave.Visible = false;
+                trenddate.Visible = false;
+                objLeave.LeaveTypeId = Convert.ToInt32("1");
+            }
+            else
+            {
+                objLeave.LeaveTypeId = Convert.ToInt32(ddlLeaveType.SelectedItem.Value);
+                trblncleave.Visible = true;
+                trenddate.Visible = true;
+            }
+
+            objLeave.UserName = Session["UserName"].ToString();
+
+            // decimal BalaceLeaves = objLeave.GetBalanceDays();
+
+
+            DataTable dTable = new DataTable();
+            strQuery = @"select NoOfLeavesPerYear from tbl_LeaveType where  LeaveTypeId=" + objLeave.LeaveTypeId ;
+            dTable = GetDetailsByDatatable(strQuery);
+            if (dTable.Rows.Count > 0)
+            {
+                NoOfLeavesPerYear = Convert.ToDecimal(dTable.Rows[0]["NoOfLeavesPerYear"].ToString());
+                DataTable dTable1 = new DataTable();
+                string strQuery1 = @"select SUM(CONVERT(DECIMAL(18,1), UsedLeaves)) as UsedLeaves from tbl_LeaveDetails where  UserName='"+txtUserName.Text.Trim()+"' and LeaveTypeId='" + objLeave.LeaveTypeId + "'";
+                dTable1 = GetDetailsByDatatable(strQuery1);
+                if (dTable1.Rows.Count > 0)
+                {
+                    if (!string.IsNullOrEmpty(dTable1.Rows[0]["UsedLeaves"].ToString()))
+                    {
+                        UsedLeaves = Convert.ToDecimal(dTable1.Rows[0]["UsedLeaves"].ToString());
+                        BalanceLeave = NoOfLeavesPerYear - UsedLeaves;
+                    }
+                    else
+                    {
+                        BalanceLeave = NoOfLeavesPerYear;
+                    }
+
+                    txtBalanceLeave.Text = BalanceLeave.ToString();
+
+                    if (txtBalanceLeave.Text.Contains(".0"))
+                    {
+                        txtBalanceLeave.Text = txtBalanceLeave.Text.Replace(".0", " ");
+                    }
+                }
+
+
+
+
+
+
+
+
+            }
+
+
+            //  decimal BalaceLeaves = Convert.ToDecimal("6.5");
+            //  txtBalanceLeave.Text = BalaceLeaves.ToString();
+        }
+        else
+            txtBalanceLeave.Text = "";
+    }
+    protected void btnApplyLeave_Click(object sender, EventArgs e)
+    {
+        //if (Convert.ToInt32(txtNoOfdays.Text) <= Convert.ToInt32(txtBalanceLeave.Text))
+        //{
+        objApplicaion.UserName = Session["UserName"].ToString();
+
+        objApplicaion.StartingDate = GMDStartDate.DateString;
+        objApplicaion.ApplaiyingDate = System.DateTime.Now.ToString();
+        objApplicaion.NoOfDays = Convert.ToInt32(txtNoOfdays.Text);
+        //string.Format("{0:yyyy-MM-dd}", System.DateTime.Now.AddDays(1))
+        DateTime s = GMDStartDate.Date;
+        // objApplicaion.EndingDate = (s.AddDays(Convert.ToInt32(txtNoOfdays.Text))).ToString();
+        if (ddlLeaveType.SelectedValue == "4")
+        {
+            objApplicaion.EndingDate = GMDStartDate.DateString;
+            objApplicaion.LeaveTypeId = Convert.ToInt32("1");
+        }
+        else
+        {
+            objApplicaion.EndingDate = GMDEndDate.DateString;
+            objApplicaion.LeaveTypeId = Convert.ToInt32(ddlLeaveType.SelectedItem.Value);
+        }
+        objApplicaion.LeavePurpose = txtPurpose.Text;
+        objApplicaion.AddLeaveApplication();
+        Response.Redirect("frmApplicationStatus.aspx");
+        //}
+        //else
+        //{
+        //    lblError.Visible = true;
+        //    lblError.Text = "No of Days should not be more than Balalnce days";
+        //}
+    }
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("frmApplicationStatus.aspx");
+    }
+
+    public static DataTable GetDetailsByDatatable(string Query)
+    {
+        SqlConnection conn;
+
+        SqlDataAdapter adp;
+        DataTable dTable = new DataTable("DataTable1");
+        conn = new SqlConnection(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["bcmgrConnection"].ToString());
+
+        adp = new SqlDataAdapter(Query, conn);
+        adp.Fill(dTable);
+        return dTable;
+    }
+}

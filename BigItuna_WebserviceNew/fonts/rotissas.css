@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'RotisSansSerifRegular';
+    src: url('rotissas.eot');
+    src: url('rotissas.eot') format('embedded-opentype'),
+         url('rotissas.woff') format('woff'),
+         url('rotissas.ttf') format('truetype'),
+         url('rotissas.svg#RotisSansSerifRegular') format('svg');
+}
