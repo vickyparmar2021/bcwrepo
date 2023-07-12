@@ -15,8 +15,6 @@ Let’s proceed with the Development setup.
 Open ubuntu bash. When you initialize it, it will ask you to create a username and password. Give username and password as you wish.
 
 
-
-
 Install PHP and its extensions:
 Run the below commands to install PHP and the required extensions for drupal.
 
